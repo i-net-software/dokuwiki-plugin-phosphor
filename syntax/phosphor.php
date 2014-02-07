@@ -24,7 +24,7 @@ class syntax_plugin_phosphor_phosphor extends DokuWiki_Syntax_Plugin {
 
     function getType() { return 'substition'; }
     function getPType() { return 'block'; }
-    function getSort() { return 98; }
+    function getSort() { return 1; }
 
     function connectTo($mode) {
         
