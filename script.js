@@ -537,7 +537,6 @@ function PhosphorPlayer(bindto_id){
 };
 
 (function($){
-		
 	
 	var addCSSRule = (function(style){
 	    var sheet = document.head.appendChild(style).sheet;
@@ -719,12 +718,14 @@ function PhosphorPlayer(bindto_id){
 		node.currentPlayer = new PhosphorInit(node, phitemcontainer);
 	};
 	
-	$(function(){
-		$(document).find('img.phosphor').each(function(index, elem){
+	
+	$.phosphor = function(root)
+	{
+		root.find('img.phosphor').each(function(index, elem){
 			new PhosphorInit($(elem));
 		});
-	
-		$(document).find('div.phblock').each(function(index, elem){
+
+		root.find('div.phblock').each(function(index, elem){
 	
 			// Content-Container
 			var phosphor = $(elem).find('span.phosphor');
@@ -773,5 +774,11 @@ function PhosphorPlayer(bindto_id){
 				});
 			});
 		});
+	};
+	
+	$(function()
+	{
+		$.phosphor($(document));
+	
 	});
 })(jQuery);
