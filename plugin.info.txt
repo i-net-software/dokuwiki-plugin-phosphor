@@ -1,8 +1,9 @@
 # General Plugin Info do not edit
 
+base   phosphor
 author i-net software
 email  tools@inetsoftware.de
 date   2014-02-07
 name   PhosPhor
 
-url    http://www.inetsoftware.de/other-products/dokuwiki-plugins/phosphor
+url    https://github.com/i-net-software/dokuwiki-plugin-phosphor
