@@ -542,10 +542,10 @@ function PhosphorPlayer(bindto_id){
 	    var sheet = document.head.appendChild(style).sheet;
 	    return function(selector, css){
 	        var propText = Object.keys(css).map(function(p){
-	            return p+":"+css[p]
+	            return p+":"+css[p];
 	        }).join(";");
 	        sheet.insertRule(selector + "{" + propText + "}", sheet.cssRules.length);
-	    }
+	    };
 	})(document.createElement("style"));
 	
 	var cssCache = [];
@@ -584,7 +584,7 @@ function PhosphorPlayer(bindto_id){
 				    "background-position":elem.parent().css('padding-left') + " " + elem.parent().css('padding-top')
 				});
 				cssCache[id] = true;
-			};
+			}
 			
 			var phosphorDoneCallBack = function() {
 				
