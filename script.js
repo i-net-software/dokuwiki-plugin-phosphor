@@ -539,7 +539,8 @@ function PhosphorPlayer(bindto_id){
 (function($){
 	
 	var addCSSRule = (function(style){
-	    var sheet = document.head.appendChild(style).sheet;
+    	var head = document.head || jQuery("head")[0] || document.documentElement;
+	    var sheet = head.appendChild(style).sheet;
 	    return function(selector, css){
 	        var propText = Object.keys(css).map(function(p){
 	            return p+":"+css[p];
