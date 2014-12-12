@@ -14,6 +14,8 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 require_once(DOKU_PLUGIN.'syntax.php');
 
 class syntax_plugin_phosphor_phosphor extends DokuWiki_Syntax_Plugin {
+    
+    private $headers = array();
 
     function getInfo(){
         return array_merge(confToHash(dirname(__FILE__).'/info.txt'), array(
@@ -75,7 +77,7 @@ class syntax_plugin_phosphor_phosphor extends DokuWiki_Syntax_Plugin {
             $exists = @file_exists($file) && @is_file($file);
         }
 
-        $scID = sectionID(noNs($id), $renderer->headers);
+        $scID = sectionID(noNs($id), $this->headers);
         $more = 'id="' . $scID . '"';
         $script = '';
 
