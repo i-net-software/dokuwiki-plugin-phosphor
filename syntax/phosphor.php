@@ -38,7 +38,7 @@ class syntax_plugin_phosphor_phosphor extends DokuWiki_Syntax_Plugin {
         $this->Lexer->addSpecialPattern('{{phosphor>[^}]+}}', $mode, 'plugin_phosphor_phosphor');
     }
 
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler $handler) {
 
         $orig = substr($match, 11, -2);
         list($id, $background, $title) = explode('|', $orig, 3); // find ID/Params + Name Extension
@@ -55,7 +55,7 @@ class syntax_plugin_phosphor_phosphor extends DokuWiki_Syntax_Plugin {
         return array(trim($id), $title, $params, $orig);
     }
 
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
 
         if ($mode == 'xhtml') {
 			$this->phosphorContent($renderer, $data);
