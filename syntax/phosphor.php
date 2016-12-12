@@ -111,6 +111,7 @@ class syntax_plugin_phosphor_phosphor extends DokuWiki_Syntax_Plugin {
             if ($p1['title'] && !$p['title']) { $p['title'] = $p1['title']; $p['alt'] = $p1['title']; }
 			if ($p1['align']) $params['class'] .= ' media' . $p1['align'];
 			if ($params['speed']) $p['speed'] = $params['speed'];
+			if ($params['loop']) $p['looping'] = $params['loop'];
 
             $p2 = buildAttributes($p);
             $content = '<' . $tag . ' src="' . ml($id, array( 'w' => $p['width'], 'h' => $p['height'] ) ) . '" '.$p2;
@@ -151,9 +152,13 @@ class syntax_plugin_phosphor_phosphor extends DokuWiki_Syntax_Plugin {
 	        if ( !empty($params['background-overlay']) ) {
 	            $overlay = 'overlay="' . ml($params['background-overlay'], array( 'w' => $background['width'], 'h' => $background['height'] ) ) . '"';
 	        }
+
+	        if ( !empty($params['loop']) && $params['loop'] == "true" ) {
+	            $loop = 'loop="true"';
+	        }
         }
 
-		$renderer->doc .= '<span class="' . trim($params['class']) . '" style="' . $style . '" ' . (!empty($zoom)?$zoom:'') . ' ' . (!empty($overlay)?$overlay:'') . ' >';
+		$renderer->doc .= '<span class="' . trim($params['class']) . '" style="' . $style . '" ' . (!empty($zoom)?$zoom:'') . ' ' . (!empty($overlay)?$overlay:'') . ' ' . (!empty($loop)?$loop:'') . ' >';
 		$renderer->doc .= '<span style="' . $style2 . '" class="phcontent">';
 		$renderer->doc .= $content;
 		$renderer->doc .= '</span></span>';

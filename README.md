@@ -22,6 +22,7 @@ Name | What it does
 -----|-------------
 **class** | additional class to put on the root element
 **speed** | a number that defines how fast the animation will run
+**loop** | will loop the movie if set to "true"
 **content-frame-zoom** | zoom factor of the inner movie that actually runs
 **background** | an image where the movie frame will be embedded
 **background-inset-left** | how far to push the movie frame from left to right
