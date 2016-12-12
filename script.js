@@ -1,3 +1,38 @@
+(function($){
+
+	/**
+	 * @desc A small plugin that checks whether elements are within
+	 *		 the user visible viewport of a web browser.
+	 *		 only accounts for horizontal position, not vertical.
+	 */
+	$.fn.checkVisible = function(){
+	    var $t				= $(this),
+            $b				= $('body'),
+            inBounds        = true;
+
+        while( $t.offsetParent()[0] != $b[0] ) {
+            
+            var $i          = $t.offsetParent(),
+                left        = $t[0].offsetLeft,
+                width       = $t.outerWidth();
+            
+            if ( $i == null || $i[0] == $t[0] ) break;
+            
+            if ( left >= 0 && (left + width) <= $i.outerWidth() ) {
+                // next cycle
+                $t = $i;
+                continue;
+            }
+            
+            inBounds = false;
+            break;
+        }
+        
+        return inBounds;
+    };
+    
+})(jQuery);
+
 /*!
  * Phosphor Framework 1.0.2
  * http://www.divergentmedia.com/phosphor
@@ -595,85 +630,91 @@ function PhosphorPlayer(bindto_id){
 				} catch(e) {
 					return;
 				}
-				
-				var replay = function() {
-					
-					$(parent).unbind('click', replay);
-					$(parent).removeClass('replay');
-	
-					// reset				
-					self.player._animationId = -1;
-					self.player.setCurrentFrameNumber(0);
-					self.player.play();
-				};
-				
-				$(parent).bind('click', replay);
-				$(parent).addClass('replay');
+
+                // only when not looping				
+				if ( !self.player._loop ) {
+    				var replay = function() {
+    					
+    					$(parent).unbind('click', replay);
+    					$(parent).removeClass('replay');
+    	
+    					// reset				
+    					self.player._animationId = -1;
+    					self.player.setCurrentFrameNumber(0);
+    					self.player.play();
+    				};
+    				
+    				$(parent).bind('click', replay);
+    				$(parent).addClass('replay');
+				}
 			};
 			
-			$.ajax({
-			  url: elem.attr('json'),
-			  cache: false,
-			  dataType: 'jsonp',
-			  jsonpCallback: elem.attr('callback'),
-			}).done(function(data){
-			
-				var animationGoIfVisible = function() {
-	
-					var window_top = $(window).scrollTop();
-					var window_height = $(window).height();
-					var top = elem.offset().top;
-					var height = elem.height();
-					
-					$(window).unbind('scroll', animationGoIfVisible);
-					if ( (top+height/2) <= window_top+window_height && (top+height/2) >= window_top /* untere kante sichtbar */
-						 && ( top+height <= window_top+window_height /* untere kante sichtbar */
-						 || (height > window_height && (top <= (window_top+window_height/2) || (top+window_height)/2>=window_top ) /* element größer als Seite*/
-						 ))
-					 )
-					 {
-						try{
-							if ( !self.player ) {
-								self.player = new PhosphorPlayer(id);
-								self.player._canvas.className = elem.className;
-								self.player._canvas.title = elem.attr('title');
-								self.player._canvas.rootElement = phitemcontainer;
-								self.player._canvas.currentPlayer = self;
-								
-								if ( zoom ) {
-									self.player._canvas.style.zoom = zoom;
-								}
-							}			
+			var animationGoIfVisible = function() {
 
-							/**
-							* Instantiate the player.  The player supports a variate of callbacks for deeper 
-							* integration into your site.
-							*/
-							if ( speed ) {
-							   data.timescale *= speed;
-							}
-							
-							framecount = data.frames.length;
-							self.player.load_animation({
-									imageArray:elem.attr("imageArray").split(","),
-									playbackFinishedCallback:phosphorDoneCallBack,
-									animationData: data,
-									loop: false,
-									onLoad: function() {
-										self.player.play();
-									}
-							});		
-						} catch( e ) {
-							
-						}
-					} else {
-						$(window).bind('scroll', animationGoIfVisible);
-					}
-				};
+				var window_top = $(window).scrollTop();
+				var window_height = $(window).height();
+				var top = elem.offset().top;
+				var left = elem.offset().left;
+				var height = elem.height();
+				var width = elem.width();
 				
-				// Recursive
-				animationGoIfVisible();	
-			});
+				$(window).unbind('scroll', animationGoIfVisible);
+                $(document).unbind('layeranimation.layerDone', animationGoIfVisible);
+				if ( (top+height/2) <= window_top+window_height && (top+height/2) >= window_top /* untere kante sichtbar */
+					 && ( top+height <= window_top+window_height /* untere kante sichtbar */
+					 || (height > window_height && (top <= (window_top+window_height/2) || (top+window_height)/2>=window_top ) /* element größer als Seite*/
+					 )) && phosphor.checkVisible()
+				 )
+				 {
+        			$.ajax({
+        			  url: elem.attr('json'),
+        			  cache: false,
+        			  dataType: 'jsonp',
+        			  jsonpCallback: elem.attr('callback'),
+        			}).done(function(data){
+    					try{
+    						if ( !self.player ) {
+    							self.player = new PhosphorPlayer(id);
+    							self.player._canvas.className = elem.className;
+    							self.player._canvas.title = elem.attr('title');
+    							self.player._canvas.rootElement = phitemcontainer;
+    							self.player._canvas.currentPlayer = self;
+    							
+    							if ( zoom ) {
+    								self.player._canvas.style.zoom = zoom;
+    							}
+    						}			
+    
+    						/**
+    						* Instantiate the player.  The player supports a variate of callbacks for deeper 
+    						* integration into your site.
+    						*/
+    						if ( speed ) {
+    						   data.timescale *= speed;
+    						}
+    						
+    						framecount = data.frames.length;
+    						self.player.load_animation({
+    								imageArray:elem.attr("imageArray").split(","),
+    								playbackFinishedCallback:phosphorDoneCallBack,
+    								animationData: data,
+    								loop: elem.attr("looping") == "true",
+    								onLoad: function() {
+    									self.player.play();
+    								}
+    						});		
+    					} catch( e ) {
+    						
+    					}
+    				});
+				} else {
+					$(window).bind('scroll', animationGoIfVisible);
+					$(document).bind('layeranimation.layerDone', animationGoIfVisible);
+				}
+			};
+			
+			// Recursive
+			animationGoIfVisible();	
 	};
 	
 	/* PhosPhor init */
