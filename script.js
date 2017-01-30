@@ -683,8 +683,8 @@ function PhosphorPlayer(bindto_id){
     							if ( zoom ) {
     								self.player._canvas.style.zoom = zoom;
     							}
-    						}			
-    
+    						}
+    						
     						/**
     						* Instantiate the player.  The player supports a variate of callbacks for deeper 
     						* integration into your site.
@@ -700,9 +700,17 @@ function PhosphorPlayer(bindto_id){
     								animationData: data,
     								loop: elem.attr("looping") == "true",
     								onLoad: function() {
+
+                						// Adjust zoom
+                                        if ( self.player._canvas.offsetWidth > phosphor.parent().width() ) {
+                                            var zoomVal = 100 / self.player._canvas.offsetWidth * phosphor.parent().width();
+                                            phosphor.css( { zoom: zoomVal + '%' } );
+                                        }
+
     									self.player.play();
     								}
     						});		
+
     					} catch( e ) {
     						
     					}
