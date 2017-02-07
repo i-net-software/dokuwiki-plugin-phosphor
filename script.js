@@ -700,17 +700,12 @@ function PhosphorPlayer(bindto_id){
     								animationData: data,
     								loop: elem.attr("looping") == "true",
     								onLoad: function() {
-
-                						// Adjust zoom
-                                        if ( self.player._canvas.offsetWidth > phosphor.parent().width() ) {
-                                            var zoomVal = 100 / self.player._canvas.offsetWidth * phosphor.parent().width();
-                                            phosphor.css( { zoom: zoomVal + '%' } );
-                                        }
-
+                                        resizeCanvas();
     									self.player.play();
     								}
     						});		
 
+                            $(window).resize(resizeCanvas);
     					} catch( e ) {
     						
     					}
@@ -719,6 +714,15 @@ function PhosphorPlayer(bindto_id){
 					$(window).bind('scroll', animationGoIfVisible);
 					$(document).bind('layeranimation.layerDone', animationGoIfVisible);
 				}
+			};
+			
+			var resizeCanvas = function () {
+				// Adjust zoom
+				phosphor.css( { zoom: null } );
+                if ( self.player._canvas.offsetWidth > phosphor.parent().width() ) {
+                    var zoomVal = 100 / self.player._canvas.offsetWidth * phosphor.parent().width();
+                    phosphor.css( { zoom: zoomVal + '%' } );
+                }
 			};
 			
 			// Recursive
