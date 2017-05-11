@@ -1,0 +1,132 @@
+span.phosphor, div.phblock {
+    position: relative;
+    display: table;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    max-width: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+span.phosphor {
+    
+    canvas.phosphor.hidden {
+        display: none;
+    }
+    
+    &:after,
+    &.replay > span:after {
+        content: '';
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        background-position: center;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+    }
+
+    &.replay > span {
+        cursor: pointer;
+        position: relative;
+
+        &:after {
+            background-color: rgba(0,0,0,0.2);
+            background-image: url(play_button.png);
+        }
+    }
+}
+
+span.phosphor > span,
+div.phblock > div {
+    float: left;
+}
+
+/* *******************************************************
+    List of PhosPhor Items
+******************************************************* */
+div.phblock
+{
+    width: 100%;
+    
+    & > div.phwrapper {
+        margin-right: 12px;
+    }
+
+    phosphor {
+        display: none;
+    }
+    
+    div.phitem
+    {
+        cursor: pointer;
+        padding: 0.5em 1em;
+        position: relative;
+        border-bottom: 1px solid #efefef;
+        
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:before, &:after
+        {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            width: 0px;
+            height: 0px;
+            border: solid transparent;
+        }
+        
+    }
+    
+    & > div.phitemlist {
+        padding-left: 12px;
+        margin-left: -1px;
+        border-left: 1px solid __lightgray__;
+        box-shadow: inset 5px 1px 5px -5px #d9d9d9;
+    }
+    
+    p.phhead {
+        font-size: 110%;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+}
+
+div.phblock div.phitem.active:before,
+div.phblock div.phitemlist div.phitem.active:hover:before,
+div.phblock div.phitem:hover:before
+{
+    border-right-color: __mediumgray__;
+}
+
+div.phblock div.phitem.active:after
+{
+    border-right-color: #FEDD94;
+}
+
+div.phblock div.phitem.active,
+div.phblock div.phitemlist div.phitem.active:hover,
+div.phblock div.phitem:hover
+{
+    background-color: #FEDD94;
+    border-bottom-color: #FEDD94;
+    box-shadow: 1px 1px 3px __mediumgray__;
+}
+
+div.phblock div.phitem:hover,
+div.phblock div.phitemlist div.phitem.active:hover
+{
+    background: #FFF6E1;
+    border-bottom-color: #efefef;
+}
+
+div.phblock div.phitem:hover:after,
+div.phblock div.phitemlist div.phitem.active:hover:after
+{
+    border-right-color: #FFF6E1;
+}
