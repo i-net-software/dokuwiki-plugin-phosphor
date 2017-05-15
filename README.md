@@ -37,13 +37,13 @@ You can display a set of movies in a single frame as well. The syntax is like th
 
 <phosphor [%SIZE%] [%PARAMS%] [%CLASSNAME%]>
 
-	<item %BASEIMAGE%[?%PARAMS%]|%TITLE%>
-		%DISPLAYTEXT%
-	</item>
+    <item %BASEIMAGE%[?%PARAMS%]|%TITLE%>
+        %DISPLAYTEXT%
+    </item>
 
-	<item %BASEIMAGE%[?%PARAMS%]|%TITLE%>
-		%DISPLAYTEXT%
-	</item>
+    <item %BASEIMAGE%[?%PARAMS%]|%TITLE%>
+        %DISPLAYTEXT%
+    </item>
 
 </phosphor>
 
