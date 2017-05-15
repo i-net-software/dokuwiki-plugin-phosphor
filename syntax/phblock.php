@@ -14,16 +14,13 @@ require_once(DOKU_PLUGIN.'syntax.php');
 
 class syntax_plugin_phosphor_phblock extends DokuWiki_Syntax_Plugin {
 
-	var $currentLayer = 0;
-
-	
     /**
      * return some info
      */
     function getInfo(){
         return array_merge(confToHash(dirname(__FILE__).'/info.txt'), array(
-				'name' => 'PhosPhor - movie embedding as a block',
-				));
+                'name' => 'PhosPhor - movie embedding as a block',
+                ));
     }
 
     function getType(){ return 'container';}
@@ -34,7 +31,6 @@ class syntax_plugin_phosphor_phblock extends DokuWiki_Syntax_Plugin {
      * Where to sort in?
      */
     function getSort(){ return 301; }
-
 
     /**
      * Connect pattern to lexer
@@ -52,75 +48,75 @@ class syntax_plugin_phosphor_phblock extends DokuWiki_Syntax_Plugin {
      * Handle the match
      */
     function handle($match, $state, $pos, Doku_Handler $handler){
-    	
+
         switch ($state) {
             case DOKU_LEXER_ENTER:
-            
-				$option = array( 'class' => 'phosphor' );
-				foreach ( explode(' ', substr($match, 10, -1)) as $item ) {
-					list($v,$n) = explode('=', $item, 2);
-					list($w1, $w2) = explode('x', $item, 2);
-					
-					if ( empty($n) ) {
-						if ( !empty($w2) ) {
-							// Width+Height
-							$option['phwrapper_width'] = $w1;
-							$v = 'phitemlist_width';
-							$n = $w2;
-						} else {
-							$option['class'] .= ' ' . trim($v);
-							continue;
-						}
-					}
 
-					$option[$v] = trim($n);
-				}
+                $option = array( 'class' => 'phosphor' );
+                foreach ( explode(' ', substr($match, 10, -1)) as $item ) {
+                    list($v,$n) = explode('=', $item, 2);
+                    list($w1, $w2) = explode('x', $item, 2);
 
-				return array('phosphor__start', $option, $pos);
-				break;
+                    if ( empty($n) ) {
+                        if ( !empty($w2) ) {
+                            // Width+Height
+                            $option['phwrapper_width'] = $w1;
+                            $v = 'phitemlist_width';
+                            $n = $w2;
+                        } else {
+                            $option['class'] .= ' ' . trim($v);
+                            continue;
+                        }
+                    }
+
+                    $option[$v] = trim($n);
+                }
+
+                return array('phosphor__start', $option, $pos);
+                break;
 
             case DOKU_LEXER_EXIT:
 
-				return array('phosphor__end', null, $pos + strlen($match));
-				break;
+                return array('phosphor__end', null, $pos + strlen($match));
+                break;
         }       
         return false;
     }
 
-	/**
-	* Create output
-	*/
+    /**
+    * Create output
+    */
     function render($mode, Doku_Renderer $renderer, $input) {
-		global $conf;
+        global $conf;
         if($mode == 'xhtml'){
 
-	    	$renderer->nocache();
+            $renderer->nocache();
 
-			list($instr, $data, $pos) = $input;
+            list($instr, $data, $pos) = $input;
 
-			switch ( $instr ) {
-			
-				case 'phosphor__start' :
-								
-					$renderer->doc .= '<div class="phblock' . (method_exists($renderer, "finishSectionEdit") ? ' ' . $renderer->startSectionEdit($pos, 'section', 'layeranimation') : "") . '">' . "\n";
-					$renderer->doc .= '<div class="phwrapper"' . (!empty($data['phitemlist_width'])?' style="width:' . hsc($data['phwrapper_width']) . '"':'') . '>';
+            switch ( $instr ) {
 
-					$functions =& plugin_load('syntax', 'phosphor_phosphor' );
-					$renderer->doc .= $functions->backgroundContainer($renderer, $data);
-					
-					$renderer->doc .= '</div>';
-					$renderer->doc .= '<div class="phitemlist"' . (!empty($data['phitemlist_width'])?' style="width:' . hsc($data['phitemlist_width']) . '"':'') . '>';
+                case 'phosphor__start' :
 
-					break;
-				case 'phosphor__end' :
-				
-					$renderer->doc .= '</div></div>' . "\n";
-					if ( method_exists($renderer, "finishSectionEdit") ) { $renderer->finishSectionEdit($pos); }
-					
-					break;
-				default :
-					return false;
-			}
+                    $renderer->doc .= '<div class="phblock' . (method_exists($renderer, "finishSectionEdit") ? ' ' . $renderer->startSectionEdit($pos, 'section', 'layeranimation') : "") . '">' . "\n";
+                    $renderer->doc .= '<div class="phwrapper"' . (!empty($data['phitemlist_width'])?' style="width:' . hsc($data['phwrapper_width']) . '"':'') . '>';
+
+                    $functions =& plugin_load('syntax', 'phosphor_phosphor' );
+                    $renderer->doc .= $functions->backgroundContainer($renderer, $data);
+
+                    $renderer->doc .= '</div>';
+                    $renderer->doc .= '<div class="phitemlist"' . (!empty($data['phitemlist_width'])?' style="width:' . hsc($data['phitemlist_width']) . '"':'') . '>';
+
+                    break;
+                case 'phosphor__end' :
+
+                    $renderer->doc .= '</div></div>' . "\n";
+                    if ( method_exists($renderer, "finishSectionEdit") ) { $renderer->finishSectionEdit($pos); }
+
+                    break;
+                default :
+                    return false;
+            }
             return true;
         }
         return false;
