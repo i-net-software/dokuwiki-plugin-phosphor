@@ -98,7 +98,7 @@ class syntax_plugin_phosphor_phblock extends DokuWiki_Syntax_Plugin {
 
                 case 'phosphor__start' :
 
-                    $renderer->doc .= '<div class="phblock' . (method_exists($renderer, "finishSectionEdit") ? ' ' . $renderer->startSectionEdit($pos, 'section', 'layeranimation') : "") . '">' . "\n";
+                    $renderer->doc .= '<div class="phblock' . (method_exists($renderer, "finishSectionEdit") ? ' ' . $renderer->startSectionEdit($pos, array( 'target' => 'section', 'name' => 'layeranimation')) : "") . '">' . "\n";
                     $renderer->doc .= '<div class="phwrapper"' . (!empty($data['phitemlist_width'])?' style="width:' . hsc($data['phwrapper_width']) . '"':'') . '>';
 
                     $functions =& plugin_load('syntax', 'phosphor_phosphor' );
